@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>mustikas_alignment</name>
+  <version>0.0.0</version>
+  <description>This package incldues the necessary nodes to align xarm manipulator with a CV detected object. The object is detected with Darknet system which uses DarkHelp as a wrapper to access its functionality from a c++ script</description>
+
+  <maintainer email="karl.kask@student.emu.ee">Karl Kask</maintainer>
+
+  <license>TODO</license>
+
+  <author email="karl.kask@student.emu.ee">Karl Kask</author>
+
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>DarkHelp</build_depend>
+  <build_depend>cv_bridge</build_depend>
+  <build_depend>darknet</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>image_transport</build_depend>
+  <build_depend>opencv4</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>moveit_ros_planning_interface</build_depend>
+  <build_export_depend>DarkHelp</build_export_depend>
+  <build_export_depend>cv_bridge</build_export_depend>
+  <build_export_depend>darknet</build_export_depend>
+  <build_export_depend>geometry_msgs</build_export_depend>
+  <build_export_depend>image_transport</build_export_depend>
+  <build_export_depend>opencv4</build_export_depend>
+  <build_export_depend>roscpp</build_export_depend>
+  <build_export_depend>sensor_msgs</build_export_depend>
+  <build_export_depend>moveit_ros_planning_interface</build_export_depend>
+  <exec_depend>DarkHelp</exec_depend>
+  <exec_depend>cv_bridge</exec_depend>
+  <exec_depend>darknet</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>image_transport</exec_depend>
+  <exec_depend>opencv4</exec_depend>
+  <exec_depend>roscpp</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>moveit_ros_planning_interface</exec_depend>
+
+
+</package>
