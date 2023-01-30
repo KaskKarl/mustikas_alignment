@@ -34,8 +34,6 @@ void cb_pointcloud(const sensor_msgs::PointCloud2& msg)
         input_pointcloud = msg;
         sensor_msgs::convertPointCloud2ToPointCloud(input_pointcloud, out_pointcloud);
 
-        std::cout << "indeks: " << ((1280*index_y)+index_x) << "\n";
-
         object_location.x = out_pointcloud.points[(1280*index_y)+index_x].x; 
         object_location.y = out_pointcloud.points[(1280*index_y)+index_x].y;
         object_location.z = out_pointcloud.points[(1280*index_y)+index_x].z;

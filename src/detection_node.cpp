@@ -66,22 +66,30 @@ public:
 
         //If there is no detected objects, the code will skip getting the coordinates
         if (results.empty()) { goto SHOW_PIC;}     
-
-        // Getting the coordinates of the detected object
-        std::cout << "x: " << results[0].rect.x << "  y: " << results[0].rect.y << std::endl;
         
-        //Getting the centerpoint coordinates of the ROI
-        koords.x = results[0].rect.x + (results[0].rect.width/2);
-        koords.y = results[0].rect.y + (results[0].rect.height/2);
+        //Looking through all the detected onjects and outputting only the coordinates of the desired class
+        for (auto i : results){
+        	//ID of pottedplant is 58
+        	if (i.best_class == 58){
+        	
+        		//Getting the centerpoint coordinates of the ROI
+        		koords.x = results[0].rect.x + (results[0].rect.width/2);
+        		koords.y = results[0].rect.y + (results[0].rect.height/2);
+        		
+        		koord_pub_.publish(koords);
+        	}
+        }
+        
+        
    
         SHOW_PIC:
         // Update GUI Window
         cv::imshow(OPENCV_WINDOW, image1);
         cv::waitKey(3);
    
-        // Output modified video stream and coordinates
+        // Output modified video stream
         image_pub_.publish(cv_ptr->toImageMsg());
-        koord_pub_.publish(koords);
+        
     }
 };
    
