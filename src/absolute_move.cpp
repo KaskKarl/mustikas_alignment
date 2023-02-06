@@ -4,13 +4,17 @@
 #include <geometry_msgs/Pose.h>
 
 bool trigger = false;
-geometry_msgs::Point goal;
+geometry_msgs::Pose goal;
 
-void callback(geometry_msgs::Point data)
+void callback(geometry_msgs::Pose data)
 {
-	goal.x = data.x;
-	goal.y = data.y;
-	goal.z = data.z;
+	goal.position.x = data.position.x;
+	goal.position.y = data.position.y;
+	goal.position.z = data.position.z;
+	goal.orientation.x = data.orientation.x;
+	goal.orientation.y = data.orientation.y;
+	goal.orientation.z = data.orientation.z;
+	goal.orientation.w = data.orientation.w;
 	
 	trigger = true;
 
@@ -44,10 +48,16 @@ int main(int argc, char** argv)
 			geometry_msgs::Pose target_pose = current_pose.pose;
 			
 			//Modifying the target pose
-			target_pose.position.x = goal.x;
-			target_pose.position.y = goal.y;
-			target_pose.position.z = goal.z;
+			target_pose.position.x = goal.position.x;
+			target_pose.position.y = goal.position.y;
+			target_pose.position.z = goal.position.z;
 			
+			
+			target_pose.orientation.x = goal.orientation.x;
+			target_pose.orientation.y = goal.orientation.y;
+			target_pose.orientation.z = goal.orientation.z;
+			target_pose.orientation.w = goal.orientation.w;
+		
 			move_group.setPoseTarget(target_pose);
 			
 			

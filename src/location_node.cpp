@@ -3,6 +3,7 @@
 #include <sensor_msgs/PointCloud2.h>
 #include <sensor_msgs/point_cloud_conversion.h>
 #include <geometry_msgs/Point.h>
+#include <geometry_msgs/PointStamped.h>
 #include <stdio.h>
 
 
@@ -19,10 +20,10 @@ bool state = false; //bool used to publish coordinates only when input from CV i
 
 geometry_msgs::Point object_location;
 
-void cb_picture_coords(const geometry_msgs::Point& msg)
+void cb_picture_coords(const geometry_msgs::PointStamped& msg)
 {
-    index_x = static_cast<int>(msg.x);
-    index_y = static_cast<int>(msg.y);
+    index_x = static_cast<int>(msg.point.x);
+    index_y = static_cast<int>(msg.point.y);
     state = true;
 
 }

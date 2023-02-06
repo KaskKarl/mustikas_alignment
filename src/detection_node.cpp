@@ -2,13 +2,14 @@
 #include <image_transport/image_transport.h>
 #include <cv_bridge/cv_bridge.h>
 #include <sensor_msgs/image_encodings.h>
-#include <geometry_msgs/Point.h>
+#include <geometry_msgs/PointStamped.h>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <darknet.h>
 #include <DarkHelp.hpp>
 #include <stdio.h>
+#include <string.h>
    
 static const std::string OPENCV_WINDOW = "Image window";
 
@@ -25,7 +26,7 @@ class ImageConverter
     ros::Publisher koord_pub_;
 
     //Varible to hold the found coordinates
-    geometry_msgs::Point koords;
+    geometry_msgs::PointStamped koords;
    
 public:
     ImageConverter()
@@ -35,7 +36,7 @@ public:
         image_sub_ = it_.subscribe("/camera/color/image_raw", 1,
             &ImageConverter::imageCb, this);
         image_pub_ = it_.advertise("/image_converter/output_video", 1);
-        koord_pub_ = nh_.advertise<geometry_msgs::Point>("/picture_coordinates", 10);
+        koord_pub_ = nh_.advertise<geometry_msgs::PointStamped>("/picture_coordinates", 10);
    
         cv::namedWindow(OPENCV_WINDOW);
     }
@@ -67,17 +68,19 @@ public:
         //If there is no detected objects, the code will skip getting the coordinates
         if (results.empty()) { goto SHOW_PIC;}     
         
-        //Looking through all the detected onjects and outputting only the coordinates of the desired class
+        //Looking through all the detected objects and outputting only the coordinates of the desired class
         for (auto i : results){
         	//ID of pottedplant is 58
         	if (i.best_class == 58){
         	
         		//Getting the centerpoint coordinates of the ROI
-        		koords.x = results[0].rect.x + (results[0].rect.width/2);
-        		koords.y = results[0].rect.y + (results[0].rect.height/2);
+        		koords.point.x = i.rect.x + (i.rect.width/2);
+        		koords.point.y = i.rect.y + (i.rect.height/2);
+        		koords.header = msg->header;
         		
         		koord_pub_.publish(koords);
         	}
+        	
         }
         
         

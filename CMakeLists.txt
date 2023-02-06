@@ -16,6 +16,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   sensor_msgs
   moveit_ros_planning_interface
+  message_filters
 )
 
  find_package(OpenCV REQUIRED)
@@ -36,7 +37,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
   INCLUDE_DIRS
 #  LIBRARIES mustikas_alignment
-  CATKIN_DEPENDS cv_bridge geometry_msgs image_transport roscpp sensor_msgs moveit_ros_planning_interface
+  CATKIN_DEPENDS cv_bridge geometry_msgs image_transport roscpp sensor_msgs moveit_ros_planning_interface message_filters
 #  DEPENDS system_lib
 )
 
@@ -107,3 +108,7 @@ target_link_libraries(coordinate_translator ${catkin_LIBRARIES})
 
 add_executable(absolute_move src/absolute_move.cpp)
 target_link_libraries(absolute_move ${catkin_LIBRARIES})
+
+add_executable(location_node_calc src/location_node_calc.cpp)
+target_link_libraries(location_node_calc ${catkin_LIBRARIES} ${OpenCV_INCLUDE_DIRS} opencv_imgcodecs opencv_dnn)
+
