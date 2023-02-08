@@ -132,7 +132,7 @@ int main (int argc, char** argv)
     //ros::Subscriber sub2 = nh.subscribe("/camera/depth/color/points", 1, cb_pointcloud);
     
     message_filters::Subscriber<geometry_msgs::PointStamped> sub1(nh, "/picture_coordinates", 1);
-    message_filters::Subscriber<sensor_msgs::Image> sub2(nh, "/camera/depth/image_raw", 1);
+    message_filters::Subscriber<sensor_msgs::Image> sub2(nh, "/camera/aligned_depth_to_color/image_raw", 1);
     
     // Setting up the synchronization of the topics
     typedef message_filters::sync_policies::ApproximateTime<geometry_msgs::PointStamped, sensor_msgs::Image> MySyncPolicy;

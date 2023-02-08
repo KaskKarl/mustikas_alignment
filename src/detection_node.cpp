@@ -71,6 +71,7 @@ public:
         //Looking through all the detected objects and outputting only the coordinates of the desired class
         for (auto i : results){
         	//ID of pottedplant is 58
+        	//ID of bottle is 39
         	if (i.best_class == 58){
         	
         		//Getting the centerpoint coordinates of the ROI
