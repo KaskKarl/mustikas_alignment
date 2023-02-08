@@ -4,22 +4,22 @@
 #include <cmath>
 
 //variables to define the camera coordinate origin relative to the robot's origin
-float camera_offset_x = 0.0;
-float camera_offset_y = -0.2; //positive value means camera is to the left of the arm
-float camera_offset_z = 0.0;
+float camera_offset_x;
+float camera_offset_y; //positive value means camera is to the left of the arm
+float camera_offset_z;
 
-float angle = 0.0; //angle in degrees
+float angle; //angle in degrees
 
 //additional positioning offsets. Used when collision with the object needs to be avoided
-float offset_x = 0.0;
-float offset_y = 0.0;
-float offset_z = 0.2;
+float offset_x;
+float offset_y;
+float offset_z;
 
 // Angle of the tool. Only 1 is used at the moment to align the tool to the ground
 
-double roll = 0.0;
-double pitch = 3.14159 - (angle * 0.01745);
-double yaw = 0.0;
+double roll;
+double pitch;
+double yaw;
 
 
 geometry_msgs::Point old_coords;
@@ -30,11 +30,13 @@ float x, z;
 
 ros::Publisher pub;
 
+
+
 void cb(const geometry_msgs::Point msg)
 {
     old_coords = msg;
 
-    new_coords.position.y = (-old_coords.x) + camera_offset_y + offset_y;
+    new_coords.position.y = (-old_coords.x) - camera_offset_y - offset_y;
     z = old_coords.y - camera_offset_z - offset_z;
     x = old_coords.z + camera_offset_x + offset_x;
 	
@@ -60,6 +62,19 @@ int main (int argc, char** argv)
 {
     ros::init(argc, argv, "coordinate_translation_node");
     ros::NodeHandle nh;
+    
+    //Getting parameters from the parameters server
+	nh.getParam("/mustikas/camera/offset_x", camera_offset_x);
+	nh.getParam("/mustikas/camera/offset_y", camera_offset_y);
+	nh.getParam("/mustikas/camera/offset_z", camera_offset_z);
+	nh.getParam("/mustikas/camera/angle", angle);
+	nh.getParam("/mustikas/goal/offset_x", offset_x);
+	nh.getParam("/mustikas/goal/offset_y", offset_y);
+	nh.getParam("/mustikas/goal/offset_z", offset_z);
+	
+	roll = 0.0;
+	pitch = 3.14159 - (angle * 0.01745);
+	yaw = 0.0;
 
     pub = nh.advertise<geometry_msgs::Pose>("/robot_coords", 10);
     ros::Subscriber sub = nh.subscribe("/object_coords", 10, cb);
@@ -68,4 +83,7 @@ int main (int argc, char** argv)
     return 0;
 
 }
+
+
+
 

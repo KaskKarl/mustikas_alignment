@@ -113,5 +113,16 @@
     <arg name="geometry_mesh_tcp_rpy" default="$(arg geometry_mesh_tcp_rpy)"/>
   </include>
   
+  <!--Camera position offset parameters -->
+  <param name="mustikas/camera/offset_x" type="double" value="0.0"/>
+  <param name="mustikas/camera/offset_y" type="double" value="0.2"/>
+  <param name="mustikas/camera/offset_z" type="double" value="0.0"/>
+  <param name="mustikas/camera/angle" type="double" value="0.0"/>
+  
+  <!--Goal position offset parameters -->
+  <param name="mustikas/goal/offset_x" type="double" value="0.0"/>
+  <param name="mustikas/goal/offset_y" type="double" value="0.0"/>
+  <param name="mustikas/goal/offset_z" type="double" value="0.2"/>
+  
 
 </launch>
