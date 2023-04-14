@@ -17,6 +17,10 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   moveit_ros_planning_interface
   message_filters
+  std_srvs
+  std_msgs
+  message_generation
+  
 )
 
  find_package(OpenCV REQUIRED)
@@ -24,6 +28,25 @@ find_package(catkin REQUIRED COMPONENTS
  pkg_check_modules( DarkNet REQUIRED DarkNet )
  pkg_check_modules( DarkHelp REQUIRED DarkHelp )
  
+add_message_files(
+ FILES
+ ROIs.msg
+ PointArray.msg
+)
+ 
+add_service_files( 
+ FILES
+ Control.srv
+ MoveToPoint.srv
+) 
+
+
+
+generate_messages(
+ DEPENDENCIES
+ geometry_msgs
+ sensor_msgs
+)
  
 ###################################
 ## catkin specific configuration ##
@@ -37,7 +60,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
   INCLUDE_DIRS
 #  LIBRARIES mustikas_alignment
-  CATKIN_DEPENDS cv_bridge geometry_msgs image_transport roscpp sensor_msgs moveit_ros_planning_interface message_filters
+  CATKIN_DEPENDS cv_bridge geometry_msgs image_transport roscpp sensor_msgs moveit_ros_planning_interface message_filters std_srvs std_msgs message_runtime
 #  DEPENDS system_lib
 )
 
@@ -112,3 +135,35 @@ target_link_libraries(absolute_move ${catkin_LIBRARIES})
 add_executable(location_node_calc src/location_node_calc.cpp)
 target_link_libraries(location_node_calc ${catkin_LIBRARIES} ${OpenCV_INCLUDE_DIRS} opencv_imgcodecs opencv_dnn)
 
+add_executable(absolute_move_cartesian src/absolute_move_cartesian.cpp)
+target_link_libraries(absolute_move_cartesian ${catkin_LIBRARIES})
+
+add_executable(xarm_control_node src/xarm_control_node.cpp)
+target_link_libraries(xarm_control_node ${catkin_LIBRARIES})
+
+add_executable(absolute_move_server src/absolute_move_server.cpp)
+target_link_libraries(absolute_move_server ${catkin_LIBRARIES})
+
+add_executable(ready_move_server src/ready_move_server.cpp)
+target_link_libraries(ready_move_server ${catkin_LIBRARIES})
+
+add_executable(xarm_control_node2 src/xarm_control_node2.cpp)
+target_link_libraries(xarm_control_node2 ${catkin_LIBRARIES})
+
+add_executable(2detection_node src/2detection_node.cpp)
+target_link_libraries(2detection_node ${catkin_LIBRARIES} ${OpenCV_INCLUDE_DIRS} ${DarkNet_LIBRARIES} ${DarkHelp_LIBRARIES} opencv_imgcodecs opencv_dnn darknet)
+
+add_executable(2location_node_calc src/2location_node_calc.cpp)
+target_link_libraries(2location_node_calc ${catkin_LIBRARIES})
+
+add_executable(2location_node src/2location_node.cpp)
+target_link_libraries(2location_node ${catkin_LIBRARIES})
+
+add_executable(2coordinate_translator src/2coordinate_translator.cpp)
+target_link_libraries(2coordinate_translator ${catkin_LIBRARIES})
+
+add_executable(commander_node src/commander_node.cpp)
+target_link_libraries(commander_node ${catkin_LIBRARIES})
+
+add_executable(2xarm_control_node2 src/2xarm_control_node2.cpp)
+target_link_libraries(2xarm_control_node2 ${catkin_LIBRARIES})

@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<launch>
+ <node pkg="mustikas_alignment" type="detection_node" name="detection_node" />
+ <node pkg="mustikas_alignment" type="location_node" name="location_node" />
+ <node pkg="mustikas_alignment" type="coordinate_translator" name="coord_translator" />
+ <node pkg="mustikas_alignment" type="xarm_control_node2" name="xarm_control_node" />
+</launch>

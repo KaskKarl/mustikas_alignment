@@ -22,6 +22,8 @@
   <build_depend>sensor_msgs</build_depend>
   <build_depend>moveit_ros_planning_interface</build_depend>
   <build_depend>message_filters</build_depend>
+  <build_depend>std_srvs</build_depend>
+  <build_depend>std_msgs</build_depend>
   <build_export_depend>DarkHelp</build_export_depend>
   <build_export_depend>cv_bridge</build_export_depend>
   <build_export_depend>darknet</build_export_depend>
@@ -32,6 +34,8 @@
   <build_export_depend>sensor_msgs</build_export_depend>
   <build_export_depend>moveit_ros_planning_interface</build_export_depend>
   <build_export_depend>message_filters</build_export_depend>
+  <build_export_depend>std_srvs</build_export_depend>
+  <build_export_depend>std_msgs</build_export_depend>
   <exec_depend>DarkHelp</exec_depend>
   <exec_depend>cv_bridge</exec_depend>
   <exec_depend>darknet</exec_depend>
@@ -42,6 +46,11 @@
   <exec_depend>sensor_msgs</exec_depend>
   <exec_depend>moveit_ros_planning_interface</exec_depend>
   <exec_depend>message_filters</exec_depend>
+  <exec_depend>std_srvs</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  
+  <build_depend>message_generation</build_depend>
+  <exec_depend>message_runtime</exec_depend>
 
 
 </package>

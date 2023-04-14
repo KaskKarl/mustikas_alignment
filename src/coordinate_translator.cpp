@@ -73,8 +73,8 @@ int main (int argc, char** argv)
 	nh.getParam("/mustikas/goal/offset_z", offset_z);
 	
 	roll = 0.0;
-	pitch = 3.14159 - (angle * 0.01745);
-	yaw = 0.0;
+	pitch = 3.14159 + (angle * 0.01745);
+	yaw = 3.14159;
 
     pub = nh.advertise<geometry_msgs::Pose>("/robot_coords", 10);
     ros::Subscriber sub = nh.subscribe("/object_coords", 10, cb);
