@@ -13,13 +13,18 @@ geometry_msgs::PoseArray mustikas_array;
 int mustikas_counter = 0;
 ros::Time fert_time(0.001);
 ros::Duration igno_time(5,0);
+bool fert_trigger = false;
 
 std_msgs::String stop;
 
 
 void cb_array(const geometry_msgs::PoseArray objects)
 {
-	mustikas_array = objects;
+	if ((ros::Time::now() - fert_time) >= igno_time)
+	{
+		mustikas_array = objects;
+		fert_trigger = true;
+	}
 }
 
 /*
@@ -60,13 +65,14 @@ int main (int argc, char** argv)
 			
 			if ((projected_x < (fert_area_center_x + (fert_area_length/2))) and (projected_x > (fert_area_center_x - (fert_area_length/2))) and (i.position.y < (fert_area_center_y + (fert_area_width/2))) and (i.position.y > (fert_area_center_y - (fert_area_width/2))))
 			{
-				std::cout << "plant in area" << std::endl;
-				if ((ros::Time::now() - fert_time) >= igno_time)
+
+				if (fert_trigger)
 				{
 					drive_pub.publish(stop);
 					ros::Duration(2).sleep();
 					pub.publish(i);
 					fert_time = ros::Time::now();
+					fert_trigger = false;
 				}
 				
 			}
