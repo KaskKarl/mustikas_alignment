@@ -3,9 +3,9 @@ This is a ROS package which is used to align a xarm robotic arm with a blueberry
 
 The package consists of several nodes. The nodes starting with nr 2 have multiple object handling capability.
 
-The Gazebo simulation of the xarm and the Intel Realsense mounted to the robot frame can be launched with the file: camera_on_robot_gazebo.launch
+The Gazebo simulation of the xarm and the Intel Realsense mounted to the robot frame can be launched with the file: `camera_on_robot_gazebo.launch`
 
-Working on a real robot camera_on_robot_real.launch can be used. Argument robot_ip has to be set to connect to the xarm.
+Working on a real robot `camera_on_robot_real.launch` can be used. Argument `robot_ip` has to be set to connect to the xarm.
 
 Different parameters can be changed within the launch files:
 ```
