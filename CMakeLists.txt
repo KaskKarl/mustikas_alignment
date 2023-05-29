@@ -167,3 +167,6 @@ target_link_libraries(commander_node ${catkin_LIBRARIES})
 
 add_executable(2xarm_control_node2 src/2xarm_control_node2.cpp)
 target_link_libraries(2xarm_control_node2 ${catkin_LIBRARIES})
+
+add_executable(stop_node src/stop.cpp)
+target_link_libraries(stop_node ${catkin_LIBRARIES})

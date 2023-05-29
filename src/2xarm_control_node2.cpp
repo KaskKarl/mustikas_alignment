@@ -5,12 +5,16 @@
 #include <std_srvs/SetBool.h>
 #include <mustikas_alignment/Control.h>
 #include <mustikas_alignment/MoveToPoint.h>
+#include <std_msgs/Bool.h>
 
 #include <stdio.h>
 
+ros::Publisher pub;
 geometry_msgs::Pose goal;
 ros::Time msg_time;
-ros::Duration time_limit(3,0);
+int time_l;
+
+std_msgs::Bool stop_msg;
 
 
 // Variable to store the functionality activated from the remote
@@ -48,6 +52,14 @@ bool control(mustikas_alignment::Control::Request &req, mustikas_alignment::Cont
 		res.success = true;
 		trigger_name = "AUTO";
 	}
+	else if (req.data == "STOP")
+	{
+		std::cout << "Execution STOPPED!" << std::endl;
+		res.message = "Execution STOPPED!";
+		res.success = true;
+		trigger_name = "STOP";
+		pub.publish(stop_msg);
+	}
 	else 
 	{
 		std::cout << "Unknown command!" << std::endl;
@@ -55,9 +67,9 @@ bool control(mustikas_alignment::Control::Request &req, mustikas_alignment::Cont
 		res.success = false;
 		trigger_name = "STANDBY";
 	}
-	
-	
-	return true;
+
+
+return true;
 }
 
 int main (int argc, char** argv)
@@ -67,6 +79,9 @@ int main (int argc, char** argv)
 	ros::AsyncSpinner spinner(1);
 	spinner.start();
 	
+	nh.getParam("/mustikas/msg_time_limit", time_l);
+	ros::Duration time_limit(time_l,0);
+	
 	// Interface setup with name xarm6
 	moveit::planning_interface::MoveGroupInterface move_group("xarm6");
 
@@ -75,19 +90,49 @@ int main (int argc, char** argv)
 	
 	const moveit::core::JointModelGroup* joint_model_group =
     move_group.getCurrentState()->getJointModelGroup("xarm6");
+    
+    pub = nh.advertise<std_msgs::Bool>("/stop_cmd", 1);
+    stop_msg.data = true;
 	
 	// Subscriber to the plant coordinates topic
 	ros::Subscriber coord_sub = nh.subscribe("mustikas_goal", 1, cb_robot_coords);
 	
 	// Service server for the remotecontrol to connect to
 	ros::ServiceServer service = nh.advertiseService("xarm_control", control);
-	
-	
-	
-	
+
 	
 	while (ros::ok())
 	{
+		if (trigger_name == "READY")
+		{
+			moveit::core::RobotStatePtr current_state = move_group.getCurrentState();
+				
+			//Setting the goal joint states
+			std::vector<double> joint_positions;
+			
+			current_state->copyJointGroupPositions(joint_model_group, joint_positions);
+			
+			joint_positions[0] = 0.0;
+			joint_positions[1] = -1.1868;
+			joint_positions[2] = 0.0;
+			joint_positions[3] = 0.0;
+			joint_positions[4] = -0.2094;
+			joint_positions[5] = 0.0;
+						
+			//Setting target pose equal to current
+			move_group.setJointValueTarget(joint_positions);
+			
+			bool success = (move_group.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+			
+			ROS_INFO_NAMED("READY MOVE", "Visualizing plan (joint space goal) %s", success ? "" : "FAILED");
+			
+			//Executing plan
+			ros::Duration(0.5).sleep();
+			move_group.execute(my_plan);
+			
+			ROS_INFO("[xarm_control_node/ready] Execution complete");
+			trigger_name = "STANDBY";
+		}
 		if ((ros::Time::now() - msg_time) <= time_limit)
 		{
 			if (trigger_name == "GOAL")
@@ -132,38 +177,6 @@ int main (int argc, char** argv)
 				move_group.execute(my_plan);
 				
 				ROS_INFO("[xarm_control_node/goal] Execution complete");
-				trigger_name = "STANDBY";
-				
-			}
-			else if (trigger_name == "READY")
-			{
-				
-				moveit::core::RobotStatePtr current_state = move_group.getCurrentState();
-				
-				//Setting the goal joint states
-				std::vector<double> joint_positions;
-				
-				current_state->copyJointGroupPositions(joint_model_group, joint_positions);
-				
-				joint_positions[0] = 0.0;
-				joint_positions[1] = -1.1868;
-				joint_positions[2] = 0.0;
-				joint_positions[3] = 0.0;
-				joint_positions[4] = -0.2094;
-				joint_positions[5] = 0.0;
-							
-				//Setting target pose equal to current
-				move_group.setJointValueTarget(joint_positions);
-				
-				bool success = (move_group.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
-				
-				ROS_INFO_NAMED("READY MOVE", "Visualizing plan (joint space goal) %s", success ? "" : "FAILED");
-				
-				//Executing plan
-				ros::Duration(0.5).sleep();
-				move_group.execute(my_plan);
-				
-				ROS_INFO("[xarm_control_node/ready] Execution complete");
 				trigger_name = "STANDBY";
 				
 			}
@@ -244,7 +257,7 @@ int main (int argc, char** argv)
 				// Do nothing
 			}
 			}
-	
+		
 	}
 	
 	ros::shutdown();

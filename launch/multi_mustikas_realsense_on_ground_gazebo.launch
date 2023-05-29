@@ -120,17 +120,32 @@
   <param name="mustikas/camera/offset_x" type="double" value="0.0"/>
   <param name="mustikas/camera/offset_y" type="double" value="0.0"/>
   <param name="mustikas/camera/offset_z" type="double" value="-0.586"/>
-  <param name="mustikas/camera/angle" type="double" value="79.5"/>
+  <param name="mustikas/camera/angle" type="double" value="0.0"/>
+  <param name="mustikas/xarm/angle" type="double" value="1.3875"/>
   
   <!--Goal position offset parameters -->
   <param name="mustikas/goal/offset_x" type="double" value="0.0"/>
   <param name="mustikas/goal/offset_y" type="double" value="0.0"/>
   <param name="mustikas/goal/offset_z" type="double" value="0.2"/>
   
+  <!--Commander node parameters -->
+  <param name="mustikas/fert_area/center_x" type="double" value="0.45"/>
+  <param name="mustikas/fert_area/center_y" type="double" value="0.0"/>
+  <param name="mustikas/fert_area/width" type="double" value="0.3"/>
+  <param name="mustikas/fert_area/length" type="double" value="0.1"/>
+  <param name="mustikas/mount_angle" type="double" value="1.38754"/>
+  <param name="mustikas/igno_time" type="int" value="5"/>
+  
+  <!--Xarm_control_node parameters -->
+  <param name="mustikas/msg_time_limit" type="int" value="3"/>
+
+  
+  
   <node pkg="mustikas_alignment" type="2detection_node" name="detection_node" />
   <node pkg="mustikas_alignment" type="2location_node" name="location_node" />
   <node pkg="mustikas_alignment" type="2coordinate_translator" name="coord_translator" />
   <node pkg="mustikas_alignment" type="2xarm_control_node2" name="xarm_control_node" />
   <node pkg="mustikas_alignment" type="commander_node" name="commander_node" />
+  <node pkg="mustikas_alignment" type="stop_node" name="stop_node" />
 
 </launch>

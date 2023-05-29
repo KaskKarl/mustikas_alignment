@@ -10,7 +10,8 @@ float camera_offset_x;
 float camera_offset_y; //positive value means camera is to the left of the arm
 float camera_offset_z;
 
-float angle; //angle in degrees
+float cam_angle; 
+float xarm_angle;
 
 //additional positioning offsets. Used when collision with the object needs to be avoided
 float offset_x;
@@ -50,8 +51,8 @@ void cb(const mustikas_alignment::PointArray::ConstPtr& msg)
 		if (!std::isnan(old_coords.x)){
 		
 			//Using a rotation matrix to rotate the x and z coordinates
-			new_coord.position.x = x*cos(angle*0.01745) + z*sin(angle*0.01745);
-			new_coord.position.z = x*sin(angle*0.01745) - z*cos(angle*0.01745);
+			new_coord.position.x = x*cos(xarm_angle-cam_angle) + z*sin(xarm_angle-cam_angle);
+			new_coord.position.z = x*sin(xarm_angle-cam_angle) - z*cos(xarm_angle-cam_angle);
 			
 			// Calculating the quarternions
 			new_coord.orientation.x = sin(roll * 0.5) * cos(pitch * 0.5) * cos(yaw * 0.5) - cos(roll * 0.5) * sin(pitch * 0.5) * sin(yaw * 0.5);
@@ -76,13 +77,14 @@ int main (int argc, char** argv)
 	nh.getParam("/mustikas/camera/offset_x", camera_offset_x);
 	nh.getParam("/mustikas/camera/offset_y", camera_offset_y);
 	nh.getParam("/mustikas/camera/offset_z", camera_offset_z);
-	nh.getParam("/mustikas/camera/angle", angle);
+	nh.getParam("/mustikas/camera/angle", cam_angle);
+	nh.getParam("/mustikas/xarm/angle", xarm_angle);
 	nh.getParam("/mustikas/goal/offset_x", offset_x);
 	nh.getParam("/mustikas/goal/offset_y", offset_y);
 	nh.getParam("/mustikas/goal/offset_z", offset_z);
 	
 	roll = 0.0;
-	pitch = 3.14159 + (angle * 0.01745);
+	pitch = 3.14159 + xarm_angle;
 	yaw = 3.14159;
 
     pub = nh.advertise<geometry_msgs::PoseArray>("/robot_coords", 10);
