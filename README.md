@@ -8,6 +8,7 @@ The Gazebo simulation of the xarm and the Intel Realsense mounted to the robot f
 For use on the real robot camera_on_robot_real.launch can be used. Argument robot_ip has to be set to connect to the xarm.
 
 Different parameters can be changed within the launch files:
+```
 mustikas/camera/offset_x - camera's x coordinate in the robot coordinate system
 mustikas/camera/offset_y - camera's y coordinate in the robot coordinate system
 mustikas/camera/offset_z - camera's z coordinate in the robot coordinate system
@@ -25,3 +26,4 @@ mustikas/fert_area/length - length of the fertilising area
 mustikas/igno_time - time when plants within the fertilization area are ignored after completing fertilization
 
 mustikas/msg_time_limit - time after which alignment to the coordinates is not carried out
+```
