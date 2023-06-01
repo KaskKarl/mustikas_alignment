@@ -6,15 +6,18 @@
 #include <mustikas_alignment/Control.h>
 #include <mustikas_alignment/MoveToPoint.h>
 #include <std_msgs/Bool.h>
+#include <std_msgs/String.h>
 
 #include <stdio.h>
 
 ros::Publisher pub;
+ros::Publisher drive_pub;
 geometry_msgs::Pose goal;
 ros::Time msg_time;
 int time_l;
 
 std_msgs::Bool stop_msg;
+std_msgs::String drive_msg;
 
 
 // Variable to store the functionality activated from the remote
@@ -92,7 +95,9 @@ int main (int argc, char** argv)
     move_group.getCurrentState()->getJointModelGroup("xarm6");
     
     pub = nh.advertise<std_msgs::Bool>("/stop_cmd", 1);
+    drive_pub = nh.advertise<std_msgs::String>("/drive_commands", 1);
     stop_msg.data = true;
+    drive_msg.data = "go";
 	
 	// Subscriber to the plant coordinates topic
 	ros::Subscriber coord_sub = nh.subscribe("mustikas_goal", 1, cb_robot_coords);
@@ -250,6 +255,12 @@ int main (int argc, char** argv)
 				move_group.execute(my_plan);
 				
 				ROS_INFO("[xarm_control_node/auto_to_ready] Execution complete");
+				
+				if (success)
+				{
+					drive_pub.publish(drive_msg);
+				}
+				
 				msg_trigger = false;
 			}
 			else

@@ -5,8 +5,8 @@
 #include <cmath>
 #include <stdio.h>
 
-ros::Publisher pub;
-ros::Publisher drive_pub;
+
+
 geometry_msgs::PoseArray mustikas_array;
 
 // Variable to keep track of the number of plants fertilized
@@ -57,6 +57,8 @@ int main (int argc, char** argv)
 	ros::AsyncSpinner spinner(1);
 	spinner.start();
 	
+	ros::Duration marker_time(10,0);
+	
 	nh.getParam("/mustikas/fert_area/center_x", fert_area_center_x);
 	nh.getParam("/mustikas/fert_area/center_y", fert_area_center_y);
 	nh.getParam("/mustikas/fert_area/width", fert_area_width);
@@ -65,8 +67,9 @@ int main (int argc, char** argv)
 	nh.getParam("/mustikas/camera/offset_x", offset_x);
 	nh.getParam("/mustikas/igno_time", igno_t);
 	
-	pub = nh.advertise<geometry_msgs::Pose>("/mustikas_goal", 1);
-	drive_pub = nh.advertise<std_msgs::String>("/drive_commands", 1);
+	ros::Publisher pub = nh.advertise<geometry_msgs::Pose>("/mustikas_goal", 1);
+	ros::Publisher drive_pub = nh.advertise<std_msgs::String>("/drive_commands", 1);
+
 	
 	ros::Subscriber sub1 = nh.subscribe("/robot_coords", 1 ,cb_array);
 	//ros::Subscriber sub2 = nh.subscribe("/mustikas_completed", 1, cb_completed);
@@ -92,10 +95,7 @@ int main (int argc, char** argv)
 					fert_time = ros::Time::now();
 					fert_trigger = false;
 				}
-				else
-				{
-					drive_pub.publish(drive);
-				}
+				
 			}
 		}
 		
