@@ -27,3 +27,12 @@ mustikas/igno_time - time when plants within the fertilization area are ignored 
 
 mustikas/msg_time_limit - time after which alignment to the coordinates is not carried out
 ```
+
+The process can be controlled by calling the `/xarm_control` service. There are 4 commands:
+```
+READY - the robot moves to the ready position
+GOAL - the robot moves to the position provided by the commander_node and stays there
+AUTO - the robot moves to the position provided by the commander_node and then back to the ready position. The cycle repeats as long as there are coordinates being published by commander_node
+STOP - the movement of the robot is stopped
+```
+If the user wants to move the robot to the READY position, the command to be executed should be: `rosservice call /xarm_control "READY"`
